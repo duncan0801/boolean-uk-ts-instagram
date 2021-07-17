@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../styles/reset.css"
-import "../styles/index.css"
+import "../styles/reset.css";
+import "../styles/index.css";
 import Header from "./components/Header";
-import Main from "./components/MAin";
+import Main from "./components/Main";
 
 function App() {
 	const [count, setCount] = useState(0);

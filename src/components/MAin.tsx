@@ -1,11 +1,14 @@
 import React from "react";
+import CreatePost from "./CreatePost";
+import Feed from "./Feed";
 
 function Main() {
 	return (
-		<main className="main-header">
-			{/* <!-- Go to 2-header-section.html --> */}
+		<main className="wrapper">
+			<CreatePost/>
+			<Feed/>
 		</main>
 	);
 }
 
-export default Main
+export default Main;
