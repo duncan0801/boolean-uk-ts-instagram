@@ -1,14 +1,18 @@
-function UserChip() {
+import React from "react";
+import { User } from "../store";
+
+type UserChipProps = {
+    user: User
+}
+
+function UserChip({user}: UserChipProps) {
 	return (
-		<div className="chip active">
+		<div className="chip">
 			<div className="avatar-small">
-				<img
-					src="https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
-					alt="Salvador Dali"
-				/>
+				<img src={user.avatar} alt={user.username} />
 			</div>
-			<span>Salvador Dali</span>
+			<span>{user.username}</span>
 		</div>
 	);
 }
-export default UserChip
+export default UserChip;
