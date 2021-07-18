@@ -6,17 +6,28 @@ import UserChip from "./UserChip";
 type PostProps = {
 	post: Post;
 };
+type Comment = {
+    id: number,
+    content: string,
+    userId: number,
+    postId: number
+}
+type CommentProps = {
+    comment: Comment
+}
 
-function Comment() {
+function Comment({comment}: CommentProps) {
+    const users = useStore((state) => state.users);
+	const commentUser = users.find((user) => user.id === comment.userId);
 	return (
 		<div className="post--comment">
 			<div className="avatar-small">
 				<img
-					src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3K588mpXWsXuFcE26ZsuTRN2IeFeKCub8hA&amp;usqp=CAU"
-					alt="Van Gogh"
+					src={commentUser ? commentUser.avatar : ""}
+					alt={commentUser ? commentUser.username : "Image Not Found"}
 				/>
 			</div>
-			<p>What a great photo!!</p>
+			<p>{comment.content}</p>
 		</div>
 	);
 }
@@ -37,24 +48,9 @@ function PostListItem({ post }: PostProps) {
 			</div>
 			<div className="post--comments">
 				<h3>Comments</h3>
-				<div className="post--comment">
-					<div className="avatar-small">
-						<img
-							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3K588mpXWsXuFcE26ZsuTRN2IeFeKCub8hA&amp;usqp=CAU"
-							alt="Van Gogh"
-						/>
-					</div>
-					<p>What a great photo!!</p>
-				</div>
-				<div className="post--comment">
-					<div className="avatar-small">
-						<img
-							src="https://www.sartle.com/sites/default/files/images/artist/pablo-picasso-137216-5115406.jpg"
-							alt="Picasso"
-						/>
-					</div>
-					<p>So beautiful... perfect!</p>
-				</div>
+                {post.comments.map(comment => {
+                    return <Comment comment={comment} />
+                })}
 				<form id="create-comment-form" autoComplete="off">
 					<label htmlFor="comment">Add comment</label>
 					<input id="comment" name="comment" type="text" />
