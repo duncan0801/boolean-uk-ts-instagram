@@ -13,8 +13,8 @@ function CreatePost() {
 				<textarea
 					id="content"
 					name="content"
-					rows="2"
-					columns="30"
+					maxLength={30}
+					columns={30}
 				></textarea>
 				<div className="action-btns">
 					<button id="preview-btn" type="button">

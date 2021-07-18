@@ -7,6 +7,7 @@ function Header() {
 	const users = useStore((state) => state.users);
 	useFetchUsers();
 
+
 	if (users == []) {
 		return <h1>Loading...</h1>;
 	}
@@ -14,7 +15,12 @@ function Header() {
 		<header className="main-header">
 			<div className="wrapper">
 				{users.map((user) => {
-					return <UserChip key={user.id} user={user} />;
+					return (
+						<UserChip
+							key={user.id}
+							user={user}
+						/>
+					);
 				})}
 			</div>
 		</header>

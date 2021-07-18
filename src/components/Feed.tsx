@@ -3,21 +3,23 @@ import useFetchPosts from "../hooks/useFetchPosts";
 import useStore, { Post } from "../store";
 import UserChip from "./UserChip";
 
+// TYPES
 type PostProps = {
 	post: Post;
 };
 type Comment = {
-    id: number,
-    content: string,
-    userId: number,
-    postId: number
-}
+	id: number;
+	content: string;
+	userId: number;
+	postId: number;
+};
 type CommentProps = {
-    comment: Comment
-}
+	comment: Comment;
+};
 
-function Comment({comment}: CommentProps) {
-    const users = useStore((state) => state.users);
+// COMPONENTS
+function Comment({ comment }: CommentProps) {
+	const users = useStore((state) => state.users);
 	const commentUser = users.find((user) => user.id === comment.userId);
 	return (
 		<div className="post--comment">
@@ -31,14 +33,13 @@ function Comment({comment}: CommentProps) {
 		</div>
 	);
 }
-
 function PostListItem({ post }: PostProps) {
 	const users = useStore((state) => state.users);
 	const postUser = users.find((user) => user.id === post.userId);
 
 	return (
 		<li className="post">
-			{postUser ? <UserChip user={postUser} /> : <h3>Loading...</h3>}
+			{postUser ? <UserChip key={postUser.id} user={postUser} /> : <h3>Loading...</h3>}
 			<div className="post--image">
 				<img src={post.image.src} alt={post.image.alt} />
 			</div>
@@ -48,9 +49,9 @@ function PostListItem({ post }: PostProps) {
 			</div>
 			<div className="post--comments">
 				<h3>Comments</h3>
-                {post.comments.map(comment => {
-                    return <Comment comment={comment} />
-                })}
+				{post.comments.map((comment) => {
+					return <Comment key={comment.id} comment={comment} />;
+				})}
 				<form id="create-comment-form" autoComplete="off">
 					<label htmlFor="comment">Add comment</label>
 					<input id="comment" name="comment" type="text" />
@@ -60,7 +61,6 @@ function PostListItem({ post }: PostProps) {
 		</li>
 	);
 }
-
 function Feed() {
 	useFetchPosts();
 	const posts = useStore((state) => state.posts);
