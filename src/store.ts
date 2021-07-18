@@ -32,6 +32,8 @@ export type Store = {
 	setPosts: (posts: Post[]) => void;
 	currentUser: number | null;
 	setCurrentUser: (userId: number) => void;
+    comments: Comment[]
+    setComments: (comments :Comment[]) => void
 };
 
 const useStore = create<Store>((set, get) => ({
@@ -41,6 +43,8 @@ const useStore = create<Store>((set, get) => ({
 	setPosts: (posts) => set({ posts: posts }),
 	currentUser: null,
 	setCurrentUser: (userId) => set({ currentUser: userId }),
+    comments: [],
+    setComments: (newComments) => set({comments: newComments})
 }));
 
 export default useStore;

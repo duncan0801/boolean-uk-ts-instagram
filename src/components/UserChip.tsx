@@ -4,7 +4,6 @@ import useStore, { User } from "../store";
 type SetCurrentUser = (userId: number) => void
 type UserChipProps = {
     user: User
-    // onClick: () => void
 }
 
 function UserChip({user}: UserChipProps) {
@@ -14,7 +13,7 @@ function UserChip({user}: UserChipProps) {
     function handleOnClickEvent(event: SyntheticEvent) {
         setCurrentUser(user.id)
     }
-    
+
 	return (
 		<div onClick={handleOnClickEvent} className={currentUser == user.id ? "chip active" : "chip"}>
 			<div className="avatar-small">

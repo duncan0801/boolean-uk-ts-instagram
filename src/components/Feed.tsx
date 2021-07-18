@@ -1,4 +1,5 @@
 import React from "react";
+import useFetchComments from "../hooks/useFetchComments";
 import useFetchPosts from "../hooks/useFetchPosts";
 import useStore, { Post } from "../store";
 import UserChip from "./UserChip";
@@ -34,8 +35,12 @@ function Comment({ comment }: CommentProps) {
 	);
 }
 function PostListItem({ post }: PostProps) {
+    useFetchComments()
+    
+	const comments = useStore((state) => state.comments);
 	const users = useStore((state) => state.users);
 	const postUser = users.find((user) => user.id === post.userId);
+    const postComments = comments.filter(comment => comment.userId === post.userId)
 
 	return (
 		<li className="post">
@@ -49,7 +54,7 @@ function PostListItem({ post }: PostProps) {
 			</div>
 			<div className="post--comments">
 				<h3>Comments</h3>
-				{post.comments.map((comment) => {
+				{postComments.map((comment) => {
 					return <Comment key={comment.id} comment={comment} />;
 				})}
 				<form id="create-comment-form" autoComplete="off">

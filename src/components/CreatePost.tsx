@@ -1,9 +1,52 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
+import useAddPostToServer from "../hooks/useAddPostToServer";
+import useStore, { Post } from "../store";
 
 function CreatePost() {
+	const currentUser = useStore((state) => state.currentUser);
+	const posts = useStore((state) => state.posts);
+	const setPosts = useStore((state) => state.setPosts);
+
+	function addPostToServer(newPost: Post) {
+		const postsURL = "http://localhost:4000/posts";
+
+		fetch(postsURL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(newPost),
+		}).then((resp) => {
+			if (resp.ok) {
+				console.log("POST SUCCESSFUL");
+				setPosts([...posts, newPost]);
+			} else console.log("FAILED TO POST");
+		});
+	}
+	function handleOnSubmitEvent(event: SyntheticEvent) {
+		event.preventDefault();
+
+		const newPost: Post = {
+			title: event.target.title.value,
+			content: event.target.content.value,
+			image: {
+				src: event.target.image.value,
+				alt: event.target.title.value,
+			},
+			likes: 0,
+			userId: currentUser,
+		};
+
+		addPostToServer(newPost);
+		event.target.reset();
+	}
 	return (
 		<section className="create-post-section">
-			<form id="create-post-form" autoComplete="off">
+			<form
+				onSubmit={handleOnSubmitEvent}
+				id="create-post-form"
+				autoComplete="off"
+			>
 				<h2>Create a post</h2>
 				<label htmlFor="image">Image</label>
 				<input id="image" name="image" type="text" />
