@@ -6,9 +6,9 @@ export type User = {
 	avatar: string;
 };
 export type Comment = {
-	id: number;
+	id?: number;
 	content: string;
-	userId: number;
+	userId: number | null;
 	postId: number;
 };
 
@@ -20,10 +20,20 @@ export type Post = {
 		src: string;
 		alt: string;
 	};
-	likes: number;
+	likes?: number;
 	userId: number;
-	comments: Comment[];
+	comments?: Comment[];
 };
+
+type PreviewPost = {
+    title: string;
+	content: string;
+	image: {
+		src: string;
+		alt: string;
+	};
+    userId: number
+}
 
 export type Store = {
 	users: User[];
@@ -32,8 +42,10 @@ export type Store = {
 	setPosts: (posts: Post[]) => void;
 	currentUser: number | null;
 	setCurrentUser: (userId: number) => void;
-    comments: Comment[]
-    setComments: (comments :Comment[]) => void
+	comments: Comment[];
+	setComments: (comments: Comment[]) => void;
+	previewPost: PreviewPost | {};
+    setPreviewPost: (postData : PreviewPost) => void
 };
 
 const useStore = create<Store>((set, get) => ({
@@ -43,8 +55,10 @@ const useStore = create<Store>((set, get) => ({
 	setPosts: (posts) => set({ posts: posts }),
 	currentUser: null,
 	setCurrentUser: (userId) => set({ currentUser: userId }),
-    comments: [],
-    setComments: (newComments) => set({comments: newComments})
+	comments: [],
+	setComments: (newComments) => set({ comments: newComments }),
+	previewPost: {},
+    setPreviewPost: (postData) => set({previewPost: postData })
 }));
 
 export default useStore;

@@ -2,10 +2,11 @@ import React from "react";
 import useFetchComments from "../hooks/useFetchComments";
 import useFetchPosts from "../hooks/useFetchPosts";
 import useStore, { Post } from "../store";
+import CommentForm from "./CommentForm";
 import UserChip from "./UserChip";
 
 // TYPES
-type PostProps = {
+export type PostProps = {
 	post: Post;
 };
 type Comment = {
@@ -34,34 +35,55 @@ function Comment({ comment }: CommentProps) {
 		</div>
 	);
 }
-function PostListItem({ post }: PostProps) {
-    useFetchComments()
-    
+export function PostListItem({ post }: PostProps) {
+	useFetchComments();
+
+	const posts = useStore((state) => state.posts);
+	const setPosts = useStore((state) => state.setPosts);
 	const comments = useStore((state) => state.comments);
 	const users = useStore((state) => state.users);
 	const postUser = users.find((user) => user.id === post.userId);
-    const postComments = comments.filter(comment => comment.userId === post.userId)
+
+	function handleOnClickEvent() {
+		console.log("clicked");
+		const updatedPosts = posts.map((p) => {
+			if (p.id === post.id) {
+				console.log(p.likes);
+				return { likes: p.likes + 1, ...p };
+			}
+			return p;
+		});
+		console.log("updatedPosts:", updatedPosts);
+		setPosts(updatedPosts);
+		console.log("posts:", posts);
+	}
 
 	return (
 		<li className="post">
-			{postUser ? <UserChip key={postUser.id} user={postUser} /> : <h3>Loading...</h3>}
+			{postUser ? (
+				<UserChip key={postUser.id} user={postUser} />
+			) : (
+				<h3>Loading...</h3>
+			)}
 			<div className="post--image">
 				<img src={post.image.src} alt={post.image.alt} />
 			</div>
 			<div className="post--content">
 				<h2>{post.title}</h2>
+				<span onClick={handleOnClickEvent}>
+					{"♥" + "" + post.likes}
+				</span>
 				<p>{post.content}</p>
 			</div>
 			<div className="post--comments">
 				<h3>Comments</h3>
-				{postComments.map((comment) => {
-					return <Comment key={comment.id} comment={comment} />;
+				{comments.map((comment) => {
+					if (comment.postId == post.id) {
+						return <Comment key={comment.id} comment={comment} />;
+					}
+					return null;
 				})}
-				<form id="create-comment-form" autoComplete="off">
-					<label htmlFor="comment">Add comment</label>
-					<input id="comment" name="comment" type="text" />
-					<button type="submit">Comment</button>
-				</form>
+				<CommentForm postId={post.id} />
 			</div>
 		</li>
 	);

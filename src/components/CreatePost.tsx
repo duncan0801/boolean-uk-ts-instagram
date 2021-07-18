@@ -1,11 +1,16 @@
 import React, { SyntheticEvent } from "react";
 import useAddPostToServer from "../hooks/useAddPostToServer";
 import useStore, { Post } from "../store";
+import UserChip from "./UserChip";
 
 function CreatePost() {
-	const currentUser = useStore((state) => state.currentUser);
+	const currentUserId = useStore((state) => state.currentUser);
+	const users = useStore((state) => state.users);
 	const posts = useStore((state) => state.posts);
 	const setPosts = useStore((state) => state.setPosts);
+	const previewPost = useStore((state) => state.previewPost);
+	const setPreviewPost = useStore((state) => state.setPreviewPost);
+	const currentUser = users.find((user) => user.id == currentUserId);
 
 	function addPostToServer(newPost: Post) {
 		const postsURL = "http://localhost:4000/posts";
@@ -34,12 +39,21 @@ function CreatePost() {
 				alt: event.target.title.value,
 			},
 			likes: 0,
-			userId: currentUser,
+			userId: currentUserId,
 		};
 
 		addPostToServer(newPost);
 		event.target.reset();
 	}
+	function renderPreview() {}
+	function handleOnClickEvent() {}
+
+	// function handleOnchangeEvent(event: SyntheticEvent) {
+	// 	const name = event.target.name
+	// 	if(name === "title") {
+    //         setPreviewPost({title: name.value, ...previewPost})
+    //     }
+	// }
 	return (
 		<section className="create-post-section">
 			<form
@@ -49,7 +63,12 @@ function CreatePost() {
 			>
 				<h2>Create a post</h2>
 				<label htmlFor="image">Image</label>
-				<input id="image" name="image" type="text" />
+				<input
+					// onChange={handleOnchangeEvent}
+					id="image"
+					name="image"
+					type="text"
+				/>
 				<label htmlFor="title">Title</label>
 				<input id="title" name="title" type="text" />
 				<label htmlFor="content">Content</label>
@@ -68,7 +87,16 @@ function CreatePost() {
 			</form>
 			{/* <!-- FOR THE CHALLENGE START --> */}
 			<div className="post">
-				{/* <!-- Go to post.html and scroll down to the preveiw cards --> */}
+				{currentUser ? (
+					<UserChip user={currentUser} />
+				) : (
+					<h3>Select a user in the header</h3>
+				)}
+				<div className="post--image loading-state"></div>
+				<div className="post--content">
+					<h2 className="loading-state"></h2>
+					<p className="loading-state"></p>
+				</div>
 			</div>
 			{/* <!-- FOR THE CHALLENGE END --> */}
 		</section>
