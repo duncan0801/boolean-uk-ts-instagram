@@ -10,21 +10,21 @@ function CommentForm({ postId }: CommentFormProps) {
 	const comments = useStore((state) => state.comments);
 	const setComments = useStore((state) => state.setComments);
 
-    function addCommentToServer(newComment: Comment) {
-        const commentsURL = "http://localhost:4000/comments"
-        fetch(commentsURL, {
+	function addCommentToServer(newComment: Comment) {
+		const commentsURL = "http://localhost:4000/comments";
+		fetch(commentsURL, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify( newComment ),
+			body: JSON.stringify(newComment),
 		}).then((resp) => {
 			if (resp.ok) {
 				console.log("POST SUCCESSFUL");
 				setComments([...comments, newComment]);
 			} else console.log("FAILED TO POST");
 		});
-    }
+	}
 	function handleOnSubmitEvent(event: SyntheticEvent) {
 		event.preventDefault();
 		// Change State
@@ -35,9 +35,9 @@ function CommentForm({ postId }: CommentFormProps) {
 		};
 
 		setComments([...comments, newCommnet]);
-        addCommentToServer(newCommnet)
-        console.log(comments)
-        event.target.reset()
+		addCommentToServer(newCommnet);
+		console.log(comments);
+		event.target.reset();
 		// Update db
 	}
 	return (

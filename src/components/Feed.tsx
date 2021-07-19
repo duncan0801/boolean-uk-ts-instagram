@@ -49,7 +49,7 @@ export function PostListItem({ post }: PostProps) {
 		const updatedPosts = posts.map((p) => {
 			if (p.id === post.id) {
 				console.log(p.likes);
-				return { likes: p.likes + 1, ...p };
+				return { likes: (p.likes + 1), ...p };
 			}
 			return p;
 		});
